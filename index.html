@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTU VOICE | Anonymous Student Voice</title>
+<link rel="icon" href="logo.jpg" type="image/jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="nav-overlay" id="navOverlay" onclick="toggleMenu()"></div>
+
+<nav class="nav" id="mainNav">
+  <div class="logo" onclick="showPage('home')">
+    <img src="logo.jpg" alt="CTU Logo" class="ctu-logo">
+    <div class="logoText"><strong>CTU VOICE</strong><small>Anonymous stories. Meaningful dialogue.</small></div>
+  </div>
+  
+  <div class="nav-links" id="navLinks">
+    <div class="mobile-menu-header">
+      <button class="close-menu" onclick="toggleMenu()">✕</button>
+      <span class="mobile-menu-title">Menu</span>
+    </div>
+    <button data-target="home" class="active-link" onclick="showPage('home')">Home</button>
+    <button data-target="submit" onclick="showPage('submit')">Share Your Story</button>
+    <button data-target="track" onclick="showPage('track')">My Submission</button>
+    <button data-target="heard" onclick="showPage('heard')">You Said. We Heard.</button>
+    <button data-target="support" onclick="showPage('support')">Support</button>
+    <button data-target="login" onclick="showPage('login')" class="mobile-login-btn">Staff Login</button>
+  </div>
+  
+  <div class="nav-actions">
+    <button class="btn secondary desktop-login-btn" onclick="showPage('login')">Staff Login</button>
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+  </div>
+</nav>
+
+<main>
+<section id="home" class="page active">
+  <div class="hero"><div class="container heroGrid">
+    <div class="animate-on-scroll">
+      <div class="eyebrow">CTU Student Voice System</div>
+      <h1>Your experience deserves to be heard.</h1>
+      <p>Share a concern, experience, appeal, or suggestion anonymously. Your identity is not required to be heard.</p>
+      <div class="actions">
+        <button class="btn primary" onclick="showPage('submit')">✎ Share Your Story</button>
+        <button class="btn secondary" onclick="showPage('support')">♡ Explore Support</button>
+      </div>
+      <div class="privacyMini">🔒 <span><b>Anonymous by design.</b> We do not ask for your name, student number, or social media account.</span></div>
+    </div>
+    
+    <div class="hero-video-container animate-on-scroll">
+      <video class="hero-video" autoplay loop muted playsinline>
+        <source src="your-video-file.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <div class="bubble one">Your voice matters.</div>
+      <div class="bubble two">Safe to speak.</div>
+    </div>
+  </div></div>
+
+  <div class="container section">
+    <div class="panel animate-on-scroll" style="background:var(--navy2);color:white">
+      <h2 style="color:white">Your privacy comes first.</h2>
+      <div class="cards" style="margin-top:18px">
+        <div class="card"><h3>✓ No name required</h3><p>No personal profile is needed.</p></div>
+        <div class="card"><h3>✓ No student number</h3><p>Submit without identifying credentials.</p></div>
+        <div class="card"><h3>✓ No social login</h3><p>No Facebook account is attached.</p></div>
+        <div class="card"><h3>✓ Mask identifiers</h3><p>Review your story before sending.</p></div>
+        <div class="card"><h3>✓ Content first</h3><p>Patterns, not personalities.</p></div>
+      </div>
+    </div>
+    <div class="notice animate-on-scroll" style="margin-top:16px"><b>Important:</b> Anonymity protects your identity, but someone familiar with the situation may still recognize unique details. Avoid names, exact locations, section numbers, or other identifying information.</div>
+  </div>
+
+  <div class="section alt"><div class="container">
+    <div class="animate-on-scroll">
+      <h2>What students are talking about</h2><p class="muted">Illustrative trends from anonymous submissions. These are not statistics about the entire student population.</p>
+    </div>
+    <div class="cards animate-on-scroll" id="trendContainer" style="margin-top:20px;"></div>
+  </div></div>
+
+  <div class="container section">
+    <div class="panel animate-on-scroll"><div style="display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap"><div><h2>You said. We heard.</h2><p class="muted">See how anonymous concerns can become clearer communication, support, and institutional learning.</p></div><button class="btn primary" onclick="showPage('heard')">See Responses & Updates →</button></div></div>
+  </div>
+  <div class="section alt"><div class="container animate-on-scroll"><h2 class="center">How it works</h2><p class="center muted">Listen. Understand. Respond. Learn.</p><div class="steps" style="margin-top:25px">
+    <div class="step"><div class="stepNum">1</div><h3>Reception</h3><p class="muted small">Receive anonymous stories and protect identity.</p></div>
+    <div class="step"><div class="stepNum">2</div><h3>Interpretation</h3><p class="muted small">Identify themes, patterns, and needs.</p></div>
+    <div class="step"><div class="stepNum">3</div><h3>Response</h3><p class="muted small">Provide support, information, or action.</p></div>
+    <div class="step"><div class="stepNum">4</div><h3>Review</h3><p class="muted small">Evaluate recurring concerns and improve services.</p></div>
+  </div></div></div>
+</section>
+
+<section id="submit" class="page">
+  <div id="submitFormContainer" class="container formWrap animate-on-scroll">
+    <div class="eyebrow">Anonymous submission</div><h2>Share Your Story</h2><p class="muted">You don't need to make it formal. Tell us what happened in your own words.</p>
+    <div class="formGrid">
+      <div class="panel">
+        <div class="field"><label>1. What would you like to share?</label><div class="optionGrid" id="categoryGrid">
+          <button class="option" data-cat="Academic Concern"><span class="icon">🎓</span><strong>Academic Concern</strong></button>
+          <button class="option" data-cat="Institutional Concern"><span class="icon">🏛️</span><strong>Institutional Concern</strong></button>
+          <button class="option" data-cat="Personal Experience"><span class="icon">👥</span><strong>Personal Experience</strong></button>
+          <button class="option" data-cat="Emotional Well-being"><span class="icon">♥</span><strong>Emotional Well-being</strong></button>
+          <button class="option" data-cat="Identity & Belonging"><span class="icon">◎</span><strong>Identity & Belonging</strong></button>
+          <button class="option" data-cat="Suggestion / Improvement"><span class="icon">💡</span><strong>Suggestion / Improvement</strong></button>
+          <button class="option" data-cat="Appeal / Request"><span class="icon">📣</span><strong>Appeal / Request</strong></button>
+          <button class="option" data-cat="Other"><span class="icon">•••</span><strong>Other</strong></button>
+        </div></div>
+        <div class="field"><label>2. How would you like us to understand this?</label><select id="intent"><option>I mainly want to share what happened.</option><option>I want someone to understand my situation.</option><option>I would like the university to consider this concern.</option><option>I would like information or clarification.</option><option>I would like support or guidance.</option><option>I'm not sure. I just need to write this down.</option></select></div>
+        <div class="field"><label>3. Tell us what happened</label><textarea id="story" placeholder="What happened? How did it affect you? What would you like others to understand?"></textarea></div>
+        <div class="notice"><b>Privacy check:</b> Before submitting, remove names, exact locations, section numbers, screenshots, or unique details that could identify you.</div>
+        <div class="checklist">
+          <label><input type="checkbox" class="privacyCheck"> I have checked my message for identifying details.</label>
+          <label><input type="checkbox" class="privacyCheck"> I understand that this is a supplementary voice mechanism, not a replacement for formal grievance or emergency services.</label>
+        </div>
+        <button class="btn primary" onclick="submitStory()">Check & Submit Anonymously →</button>
+      </div>
+      <aside class="panel"><h3>Before you submit</h3><p class="small muted">You can share academic, emotional, social, institutional, identity-related concerns, suggestions, or appeals.</p><hr style="border:0;border-top:1px solid var(--line)"><h3>What happens next?</h3><p class="small muted">Your submission is ethically screened, organized by concern, and may contribute to recurring-pattern review.</p><p class="small muted"><b>We focus on patterns rather than personalities.</b></p></aside>
+    </div>
+  </div>
+  
+  <div id="submitSuccessContainer" class="hidden"></div>
+</section>
+
+<section id="track" class="page"><div class="container section animate-on-scroll"><div class="panel" style="max-width:650px;margin:auto">
+  <div class="eyebrow">Anonymous follow-up</div><h2>Check My Submission</h2><p class="muted">Enter the reference code you received after submitting.</p>
+  <div class="field"><input id="trackCode" placeholder="e.g., CV-7K4P-29"></div><button class="btn primary" onclick="trackSubmission()">Check Status</button>
+  <div id="trackResult" class="hidden" style="margin-top:25px"></div>
+</div></div></section>
+
+<section id="heard" class="page"><div class="container section">
+  <div class="animate-on-scroll">
+    <div class="eyebrow">Feedback loop</div><h2>You Said. We Heard.</h2><p class="muted">Anonymous concerns can become clearer information, support actions, and institutional learning.</p>
+  </div>
+  <div class="cards animate-on-scroll" id="heardContainer" style="margin-top:25px;"></div>
+  <div class="panel animate-on-scroll" style="margin-top:22px"><h3>What we heard</h3><p class="muted">Recurring themes are reviewed without publicly identifying individual writers. Responses should focus on support, clarification, constructive dialogue, and institutional improvement.</p></div>
+</div></section>
+
+<section id="support" class="page"><div class="container section">
+  <div class="animate-on-scroll">
+    <div class="eyebrow">Support</div><h2>You don't have to submit a story to ask for help.</h2><p class="muted">This system supplements formal university channels rather than replacing them.</p>
+  </div>
+  
+  <div class="cards" style="margin-top:25px;">
+    
+    <div class="card animate-on-scroll">
+      <div class="support-badge academic">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
+      </div>
+      <h3>Academic Support</h3>
+      <p>Academic advising, requirements, workload, and course concerns.</p>
+      <button class="btn secondary" style="margin-top:10px; width:100%;" onclick="window.open('https://www.facebook.com/ctuacadmissionoffice', '_blank')">View Support</button>
+    </div>
+
+    <div class="card animate-on-scroll">
+      <div class="support-badge emotional">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+      </div>
+      <h3>Emotional Support</h3>
+      <p>Guidance and well-being resources for students experiencing distress.</p>
+      <button class="btn secondary" style="margin-top:10px; width:100%;" onclick="window.open('https://www.facebook.com/ctuacpeerfacilitator', '_blank')">Find Support</button>
+    </div>
+
+    <div class="card animate-on-scroll">
+      <div class="support-badge affairs">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+      </div>
+      <h3>Student Affairs</h3>
+      <p>Institutional concerns, services, policies, and student welfare.</p>
+      <button class="btn secondary" style="margin-top:10px; width:100%;" onclick="window.open('https://www.facebook.com/profile.php?id=100080414087307', '_blank')">Contact Office</button>
+    </div>
+
+    <div class="card animate-on-scroll">
+      <div class="support-badge formal">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+      </div>
+      <h3>Formal Reporting</h3>
+      <p>Use official procedures when an investigation, documentation, or due process is required.</p>
+      <button class="btn secondary" style="margin-top:10px; width:100%;" onclick="window.open('https://www.facebook.com/profile.php?id=100080414087307', '_blank')">Message Administration</button>
+    </div>
+
+  </div>
+  
+  <div class="notice animate-on-scroll" style="margin-top:22px"><b>Immediate safety:</b> This prototype is not an emergency response service. For urgent or immediate safety concerns, use the appropriate official emergency/support channel.</div>
+</div></section>
+
+<section id="login" class="page auth-page"><div class="container section animate-on-scroll">
+  <div class="panel">
+    <div class="center" style="margin-bottom: 12px;">
+      <img src="logo.jpg" alt="CTU Logo" class="ctu-logo" style="width: 65px; height: 65px;">
+    </div>
+    <h2 class="center">Staff Authentication</h2>
+    <p class="muted center">Log in to the administrative dashboard to review and manage student feedback.</p>
+
+    <div class="field">
+      <label>Staff Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@ctu.edu.ph">
+    </div>
+    
+    <div class="field">
+      <label>Password</label>
+      <div class="password-wrapper">
+        <input type="password" id="loginPassword" placeholder="Enter your password">
+        <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
+          <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 8C19.78 10.74 16.14 12.5 12 12.5C7.86 12.5 4.22 10.74 2 8"></path>
+            <path d="M12 12.5V16.5"></path>
+            <path d="M7.5 11.5L5.5 14.5"></path>
+            <path d="M16.5 11.5L18.5 14.5"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <div class="checklist" style="margin: 15px 0; background: #fff0c9; border-color: #d69f38;">
+      <label style="color: #8a6100;">
+        <input type="checkbox" id="adminConfidentiality"> 
+        <span><strong>Strict Confidentiality Agreement:</strong> I acknowledge that student submissions are sensitive. I agree not to share, discuss, or "chika" these concerns outside of official university procedures.</span>
+      </label>
+    </div>
+    
+    <button class="btn primary" style="width:100%;margin-top:12px;" onclick="handleLogin()">Log In to Dashboard</button>
+    <p class="center small muted" style="margin-top:18px;">
+      <span style="color:var(--muted);">Secure area restricted to authorized university personnel only.</span>
+    </p>
+  </div>
+</div></section>
+
+<section id="dashboard" class="page">
+  <div style="background:var(--navy2); padding: 20px 5%; color:white; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:20;">
+    <div><strong>CTU VOICE ADMIN</strong> <span class="status received" style="margin-left:10px; background:#fff; color:var(--navy2);">Secure</span></div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn secondary" style="padding:6px 12px!important; font-size:12px;" onclick="handleLogout()">Logout</button>
+    </div>
+  </div>
+  
+  <div class="container section">
+    <div class="animate-on-scroll">
+      <h2>Dashboard Overview</h2>
+      <div class="cards" id="adminMetrics" style="margin-bottom: 25px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));"></div>
+    </div>
+    
+    <div class="panel animate-on-scroll" style="padding:20px; overflow-x:auto; -webkit-overflow-scrolling: touch;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; flex-wrap:wrap; gap:10px;">
+        <h3 style="margin:0;">Incoming Submissions</h3>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <select id="filterCategory" onchange="loadDashboard()" class="admin-filter">
+            <option value="All">All Categories</option>
+            <option value="Academic Concern">Academic Concern</option>
+            <option value="Institutional Concern">Institutional Concern</option>
+            <option value="Personal Experience">Personal Experience</option>
+            <option value="Emotional Well-being">Emotional Well-being</option>
+            <option value="Identity & Belonging">Identity & Belonging</option>
+            <option value="Suggestion / Improvement">Suggestion / Improvement</option>
+            <option value="Appeal / Request">Appeal / Request</option>
+            <option value="Other">Other</option>
+          </select>
+          <select id="filterStatus" onchange="loadDashboard()" class="admin-filter">
+            <option value="All">All Statuses</option>
+            <option value="Received">Received</option>
+            <option value="Under Review">Under Review</option>
+            <option value="Responded">Responded</option>
+            <option value="Archived">Archived (Spam)</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Reference</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody">
+          </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div id="viewModal" class="modal-overlay" onclick="if(event.target===this) closeModal('viewModal')">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeModal('viewModal')">✕</button>
+    <div class="eyebrow" id="viewCategory">Category</div>
+    <h3 style="margin-top:5px; margin-bottom:15px;">Submission Details</h3>
+    <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:15px;">
+      <span class="muted small">Ref: <strong style="color:var(--navy);" id="viewRef"></strong></span>
+      <span class="muted small">Date: <span id="viewDate"></span></span>
+    </div>
+    <div style="background:var(--cream); padding:15px; border-radius:12px; margin-bottom:15px;">
+      <strong style="font-size:12px; color:var(--muted); display:block; margin-bottom:5px;">Student Intent:</strong>
+      <span id="viewIntent" style="font-size:13px; font-weight:600;"></span>
+    </div>
+    <p id="viewStory" style="white-space:pre-wrap; font-size:14px; line-height:1.6; word-break: break-word; overflow-wrap: anywhere;"></p>
+  </div>
+</div>
+
+<div id="publishModal" class="modal-overlay" onclick="if(event.target===this) closeModal('publishModal')">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeModal('publishModal')">✕</button>
+    <div class="eyebrow">Public Feedback Loop</div>
+    <h3 style="margin-top:5px; margin-bottom:5px;">Publish Institutional Response</h3>
+    <p class="muted small" style="margin-bottom:20px;">This will publish an update directly to the "You Said. We Heard." public page.</p>
+    
+    <div class="field">
+      <label>Response Title</label>
+      <input type="text" id="pubTitle" placeholder="e.g., Campus Wi-Fi Expansion">
+    </div>
+    <div class="field">
+      <label>Concern & Action Taken Summary</label>
+      <textarea id="pubConcern" style="min-height:100px;" placeholder="Summarize the pattern of concern and what the university is doing to resolve it."></textarea>
+    </div>
+    <div class="field">
+      <label>Status Label</label>
+      <select id="pubStatusLabel">
+        <option value="Action underway">Action underway</option>
+        <option value="Support shared">Support shared</option>
+        <option value="Policy updated">Policy updated</option>
+        <option value="Under review">Under review</option>
+      </select>
+    </div>
+    <button class="btn primary" style="width:100%; margin-top:10px;" onclick="publishResponse()">Publish Response Live</button>
+  </div>
+</div>
+
+</main>
+
+<footer class="footer"><div class="container"><b>CTU VOICE</b><br><small>Anonymous stories. Meaningful dialogue. | Privacy | Terms | Accessibility | Prototype</small></div></footer>
+<div id="toast" class="toast"></div>
+
+<!-- Database script connection -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
