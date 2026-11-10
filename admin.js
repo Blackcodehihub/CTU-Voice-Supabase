@@ -80,12 +80,14 @@ function loadDashboard() {
   const received = submissions.filter(s => s.status === "Received").length;
   const review = submissions.filter(s => s.status === "Under Review").length;
   const responded = submissions.filter(s => s.status === "Responded").length;
+  const archived = submissions.filter(s => s.status === "Archived").length;
 
   document.getElementById("adminMetrics").innerHTML = `
     <div class="card" style="border-left:4px solid var(--navy);"><h3>Total Feedback</h3><p style="font-size:24px; font-weight:900; color:var(--navy); margin:5px 0;">${total}</p></div>
     <div class="card" style="border-left:4px solid #a32d3c;"><h3>Received</h3><p style="font-size:24px; font-weight:900; color:#a32d3c; margin:5px 0;">${received}</p></div>
     <div class="card" style="border-left:4px solid #8a6100;"><h3>Under Review</h3><p style="font-size:24px; font-weight:900; color:#8a6100; margin:5px 0;">${review}</p></div>
     <div class="card" style="border-left:4px solid #377d22;"><h3>Responded</h3><p style="font-size:24px; font-weight:900; color:#377d22; margin:5px 0;">${responded}</p></div>
+    <div class="card" style="border-left:4px solid #68758a;"><h3>Spam / Archived</h3><p style="font-size:24px; font-weight:900; color:#68758a; margin:5px 0;">${archived}</p></div>
   `;
 
   const catFilter = document.getElementById("filterCategory").value;
@@ -116,6 +118,7 @@ function loadDashboard() {
             <option value="Received" ${sub.status === 'Received' ? 'selected' : ''}>Received</option>
             <option value="Under Review" ${sub.status === 'Under Review' ? 'selected' : ''}>Under Review</option>
             <option value="Responded" ${sub.status === 'Responded' ? 'selected' : ''}>Responded</option>
+            <option value="Archived" ${sub.status === 'Archived' ? 'selected' : ''}>Archived (Spam)</option>
           </select>
         </td>
         <td>

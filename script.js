@@ -18,10 +18,16 @@ async function fetchLiveData() {
   updateTrends();
 }
 
+// Clean SVG icons for the trend cards instead of emojis
 const categoryIcons = {
-  "Academic Concern": "🎓", "Institutional Concern": "🏛️", "Personal Experience": "👥",
-  "Emotional Well-being": "♥", "Identity & Belonging": "◎", "Suggestion / Improvement": "💡",
-  "Appeal / Request": "📣", "Other": "•••"
+  "Academic Concern": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:4px; color:var(--teal);"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>`,
+  "Institutional Concern": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:4px; color:var(--teal);"><path d="M3 21h18"/><path d="M4 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v16"/><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg>`,
+  "Personal Experience": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:4px; color:var(--teal);"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+  "Emotional Well-being": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:4px; color:var(--teal);"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
+  "Identity & Belonging": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:4px; color:var(--teal);"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>`,
+  "Suggestion / Improvement": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:4px; color:var(--teal);"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>`,
+  "Appeal / Request": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:4px; color:var(--teal);"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>`,
+  "Other": `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:text-bottom; margin-right:4px; color:var(--teal);"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>`
 };
 
 document.querySelectorAll(".option").forEach(b => b.addEventListener("click", () => {
@@ -54,7 +60,6 @@ function showPage(id) {
      overlay.classList.remove("active");
   }
 
-  // Refresh form logic to hide success message and empty fields for next user
   if (id === 'submit') {
     const formDiv = document.getElementById("submitFormContainer");
     const successDiv = document.getElementById("submitSuccessContainer");
@@ -110,7 +115,7 @@ function updateTrends() {
 
   container.innerHTML = trends.map(t => `
     <div class="card">
-      <h3>${categoryIcons[t.category] || "📌"} ${t.category}</h3>
+      <h3 style="display:flex; align-items:center;">${categoryIcons[t.category] || ""} ${t.category}</h3>
       <strong>${t.percent}%</strong>
       <div class="trend"><span style="width:${t.percent}%"></span></div>
     </div>
@@ -236,184 +241,6 @@ async function trackSubmission() {
 
 function escapeHtml(s) {
   return s.replace(/[&<>"']/g, m => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"}[m]));
-}
-
-async function handleLogin() {
-  const email = document.getElementById("loginEmail").value.trim();
-  const pass = document.getElementById("loginPassword").value.trim();
-  const isConfidentialityChecked = document.getElementById("adminConfidentiality").checked;
-  
-  if (!isConfidentialityChecked) {
-    toast("You must agree to the Strict Confidentiality Agreement before logging in.");
-    return;
-  }
-  
-  if (email === "admin@ctu.edu.ph" && pass === "admin123") {
-    document.getElementById("mainNav").style.display = "none";
-    showPage('dashboard');
-    await fetchLiveData(); 
-    loadDashboard();
-    
-    document.getElementById("adminConfidentiality").checked = false;
-    
-    toast("Welcome to the Admin Dashboard.");
-  } else {
-    toast("Incorrect email or password.");
-  }
-}
-
-function handleLogout() {
-  document.getElementById("loginEmail").value = "";
-  document.getElementById("loginPassword").value = "";
-  document.getElementById("mainNav").style.display = "flex";
-  
-  const passInput = document.getElementById("loginPassword");
-  const icon = document.getElementById("eyeIcon");
-  passInput.type = "password";
-  icon.innerHTML = '<path d="M22 8C19.78 10.74 16.14 12.5 12 12.5C7.86 12.5 4.22 10.74 2 8"></path><path d="M12 12.5V16.5"></path><path d="M7.5 11.5L5.5 14.5"></path><path d="M16.5 11.5L18.5 14.5"></path>';
-  
-  showPage('home');
-  toast("Successfully logged out.");
-}
-
-function togglePasswordVisibility() {
-  const passInput = document.getElementById("loginPassword");
-  const icon = document.getElementById("eyeIcon");
-  
-  if (passInput.type === "password") {
-    passInput.type = "text";
-    icon.innerHTML = '<path d="M2 12c2.22-2.74 5.86-4.5 10-4.5s7.78 1.76 10 4.5c-2.22 2.74-5.86 4.5-10 4.5s-7.78-1.76-10-4.5z"></path><circle cx="12" cy="12" r="3"></circle>';
-  } else {
-    passInput.type = "password";
-    icon.innerHTML = '<path d="M22 8C19.78 10.74 16.14 12.5 12 12.5C7.86 12.5 4.22 10.74 2 8"></path><path d="M12 12.5V16.5"></path><path d="M7.5 11.5L5.5 14.5"></path><path d="M16.5 11.5L18.5 14.5"></path>';
-  }
-}
-
-function loadDashboard() {
-  const total = submissions.length;
-  const received = submissions.filter(s => s.status === "Received").length;
-  const review = submissions.filter(s => s.status === "Under Review").length;
-  const responded = submissions.filter(s => s.status === "Responded").length;
-  const archived = submissions.filter(s => s.status === "Archived").length;
-
-  document.getElementById("adminMetrics").innerHTML = `
-    <div class="card" style="border-left:4px solid var(--navy);"><h3>Total Feedback</h3><p style="font-size:24px; font-weight:900; color:var(--navy); margin:5px 0;">${total}</p></div>
-    <div class="card" style="border-left:4px solid #a32d3c;"><h3>Received</h3><p style="font-size:24px; font-weight:900; color:#a32d3c; margin:5px 0;">${received}</p></div>
-    <div class="card" style="border-left:4px solid #8a6100;"><h3>Under Review</h3><p style="font-size:24px; font-weight:900; color:#8a6100; margin:5px 0;">${review}</p></div>
-    <div class="card" style="border-left:4px solid #377d22;"><h3>Responded</h3><p style="font-size:24px; font-weight:900; color:#377d22; margin:5px 0;">${responded}</p></div>
-    <div class="card" style="border-left:4px solid #68758a;"><h3>Spam / Archived</h3><p style="font-size:24px; font-weight:900; color:#68758a; margin:5px 0;">${archived}</p></div>
-  `;
-
-  const catFilter = document.getElementById("filterCategory").value;
-  const statFilter = document.getElementById("filterStatus").value;
-
-  const filtered = submissions.filter(s => {
-    const matchCat = catFilter === "All" || s.category === catFilter;
-    const matchStat = statFilter === "All" || s.status === statFilter;
-    return matchCat && matchStat;
-  });
-
-  const tbody = document.getElementById("adminTableBody");
-  
-  if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" class="center muted" style="padding:30px;">No submissions match your filters.</td></tr>`;
-    return;
-  }
-  
-  tbody.innerHTML = filtered.map(sub => {
-    const dateStr = new Date(sub.created_at).toLocaleDateString();
-    return `
-      <tr>
-        <td style="font-size:12px; color:var(--muted);">${dateStr}</td>
-        <td><strong>${sub.ref_code}</strong></td>
-        <td><span style="font-size:12px;">${sub.category}</span></td>
-        <td>
-          <select class="status-select" onchange="updateStatus('${sub.ref_code}', this.value)">
-            <option value="Received" ${sub.status === 'Received' ? 'selected' : ''}>Received</option>
-            <option value="Under Review" ${sub.status === 'Under Review' ? 'selected' : ''}>Under Review</option>
-            <option value="Responded" ${sub.status === 'Responded' ? 'selected' : ''}>Responded</option>
-            <option value="Archived" ${sub.status === 'Archived' ? 'selected' : ''}>Archived (Spam)</option>
-          </select>
-        </td>
-        <td>
-          <div style="display:flex; gap:6px;">
-            <button class="btn secondary" style="padding:6px 10px!important; font-size:11px;" onclick="viewSubmission('${sub.ref_code}')">View</button>
-            <button class="btn primary" style="padding:6px 10px!important; font-size:11px;" onclick="openPublishModal('${sub.ref_code}')">Publish</button>
-          </div>
-        </td>
-      </tr>
-    `;
-  }).join("");
-}
-
-// --- 5. UPDATE STATUS IN CLOUD ---
-async function updateStatus(ref, newStatus) {
-  const { error } = await supabaseClient.from('submissions').update({ status: newStatus }).eq('ref_code', ref);
-  
-  if (error) {
-    toast("Error updating status.");
-    console.error(error);
-  } else {
-    await fetchLiveData(); 
-    loadDashboard(); 
-    toast(`Status updated to ${newStatus}`);
-  }
-}
-
-function viewSubmission(ref) {
-  const item = submissions.find(s => s.ref_code === ref);
-  if(!item) return;
-
-  document.getElementById("viewCategory").textContent = item.category;
-  document.getElementById("viewRef").textContent = item.ref_code;
-  document.getElementById("viewDate").textContent = new Date(item.created_at).toLocaleDateString();
-  document.getElementById("viewIntent").textContent = item.intent;
-  document.getElementById("viewStory").textContent = item.story;
-  
-  document.getElementById("viewModal").classList.add("active");
-}
-
-function openPublishModal(ref) {
-  const item = submissions.find(s => s.ref_code === ref);
-  if(!item) return;
-
-  document.getElementById("pubTitle").value = ""; 
-  document.getElementById("pubConcern").value = "";
-  
-  document.getElementById("publishModal").classList.add("active");
-}
-
-// --- 6. PUBLISH TO CLOUD DB ---
-async function publishResponse() {
-  const title = document.getElementById("pubTitle").value.trim();
-  const concern = document.getElementById("pubConcern").value.trim();
-  const label = document.getElementById("pubStatusLabel").value;
-
-  if(!title || !concern) {
-    toast("Please fill out both the title and the concern summary.");
-    return;
-  }
-
-  let statusClass = "review";
-  if(label === "Action underway" || label === "Support shared" || label === "Policy updated") statusClass = "responded";
-
-  const { error } = await supabaseClient.from('responses').insert([
-    { title: title, concern: concern, statuslabel: label, statusclass: statusClass }
-  ]);
-
-  if (error) {
-    toast("Error publishing response.");
-    console.error(error);
-    return;
-  }
-  
-  await fetchLiveData(); 
-  closeModal('publishModal');
-  toast("Response successfully published to 'You Said. We Heard.'");
-}
-
-function closeModal(modalId) {
-  document.getElementById(modalId).classList.remove("active");
 }
 
 function initScrollObserver() {
