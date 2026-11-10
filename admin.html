@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Portal | CTU VOICE</title>
+<link rel="icon" href="logo.jpg" type="image/jpeg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav" id="adminNav">
+  <div class="logo">
+    <img src="logo.jpg" alt="CTU Logo" class="ctu-logo">
+    <div class="logoText"><strong>CTU VOICE</strong><small>Admin Portal</small></div>
+  </div>
+  <div class="nav-actions">
+    <a href="index.html" class="btn secondary" style="text-decoration:none; padding:10px 15px!important;">Back to Main Site</a>
+  </div>
+</nav>
+
+<main>
+<section id="login" class="page active auth-page"><div class="container section">
+  <div class="panel">
+    <div class="center" style="margin-bottom: 12px;">
+      <img src="logo.jpg" alt="CTU Logo" class="ctu-logo" style="width: 65px; height: 65px;">
+    </div>
+    <h2 class="center">Staff Authentication</h2>
+    <p class="muted center">Log in to the administrative dashboard to review and manage student feedback.</p>
+
+    <div class="field">
+      <label>Staff Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@ctu.edu.ph">
+    </div>
+    
+    <div class="field">
+      <label>Password</label>
+      <div class="password-wrapper">
+        <input type="password" id="loginPassword" placeholder="Enter your password">
+        <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
+          <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 8C19.78 10.74 16.14 12.5 12 12.5C7.86 12.5 4.22 10.74 2 8"></path>
+            <path d="M12 12.5V16.5"></path>
+            <path d="M7.5 11.5L5.5 14.5"></path>
+            <path d="M16.5 11.5L18.5 14.5"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <div class="checklist" style="margin: 15px 0; background: #fff0c9; border-color: #d69f38;">
+      <label style="color: #8a6100;">
+        <input type="checkbox" id="adminConfidentiality"> 
+        <span><strong>Strict Confidentiality Agreement:</strong> I acknowledge that student submissions are sensitive. I agree not to share, discuss, or "chika" these concerns outside of official university procedures.</span>
+      </label>
+    </div>
+    
+    <button class="btn primary" style="width:100%;margin-top:12px;" onclick="handleLogin()">Log In to Dashboard</button>
+  </div>
+</div></section>
+
+<section id="dashboard" class="page">
+  <div style="background:var(--navy2); padding: 20px 5%; color:white; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:20;">
+    <div><strong>CTU VOICE ADMIN</strong> <span class="status received" style="margin-left:10px; background:#fff; color:var(--navy2);">Secure</span></div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn secondary" style="padding:6px 12px!important; font-size:12px;" onclick="handleLogout()">Logout</button>
+    </div>
+  </div>
+  
+  <div class="container section">
+    <h2>Dashboard Overview</h2>
+    <div class="cards" id="adminMetrics" style="margin-bottom: 25px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));"></div>
+    
+    <div class="panel" style="padding:20px; overflow-x:auto;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; flex-wrap:wrap; gap:10px;">
+        <h3 style="margin:0;">Incoming Submissions</h3>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <select id="filterCategory" onchange="loadDashboard()" class="admin-filter">
+            <option value="All">All Categories</option>
+            <option value="Academic Concern">Academic Concern</option>
+            <option value="Institutional Concern">Institutional Concern</option>
+            <option value="Personal Experience">Personal Experience</option>
+            <option value="Emotional Well-being">Emotional Well-being</option>
+            <option value="Identity & Belonging">Identity & Belonging</option>
+            <option value="Suggestion / Improvement">Suggestion / Improvement</option>
+            <option value="Appeal / Request">Appeal / Request</option>
+            <option value="Other">Other</option>
+          </select>
+          <select id="filterStatus" onchange="loadDashboard()" class="admin-filter">
+            <option value="All">All Statuses</option>
+            <option value="Received">Received</option>
+            <option value="Under Review">Under Review</option>
+            <option value="Responded">Responded</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Reference</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody">
+          </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Modals -->
+<div id="viewModal" class="modal-overlay" onclick="if(event.target===this) closeModal('viewModal')">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeModal('viewModal')">✕</button>
+    <div class="eyebrow" id="viewCategory">Category</div>
+    <h3 style="margin-top:5px; margin-bottom:15px;">Submission Details</h3>
+    <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:15px;">
+      <span class="muted small">Ref: <strong style="color:var(--navy);" id="viewRef"></strong></span>
+      <span class="muted small">Date: <span id="viewDate"></span></span>
+    </div>
+    <div style="background:var(--cream); padding:15px; border-radius:12px; margin-bottom:15px;">
+      <strong style="font-size:12px; color:var(--muted); display:block; margin-bottom:5px;">Student Intent:</strong>
+      <span id="viewIntent" style="font-size:13px; font-weight:600;"></span>
+    </div>
+    <p id="viewStory" style="white-space:pre-wrap; font-size:14px; line-height:1.6; word-break: break-word; overflow-wrap: anywhere;"></p>
+  </div>
+</div>
+
+<div id="publishModal" class="modal-overlay" onclick="if(event.target===this) closeModal('publishModal')">
+  <div class="modal-content">
+    <button class="close-modal" onclick="closeModal('publishModal')">✕</button>
+    <div class="eyebrow">Public Feedback Loop</div>
+    <h3 style="margin-top:5px; margin-bottom:5px;">Publish Institutional Response</h3>
+    <p class="muted small" style="margin-bottom:20px;">This will publish an update directly to the "You Said. We Heard." public page.</p>
+    
+    <div class="field">
+      <label>Response Title</label>
+      <input type="text" id="pubTitle" placeholder="e.g., Campus Wi-Fi Expansion">
+    </div>
+    <div class="field">
+      <label>Concern & Action Taken Summary</label>
+      <textarea id="pubConcern" style="min-height:100px;" placeholder="Summarize the pattern of concern and what the university is doing to resolve it."></textarea>
+    </div>
+    <div class="field">
+      <label>Status Label</label>
+      <select id="pubStatusLabel">
+        <option value="Action underway">Action underway</option>
+        <option value="Support shared">Support shared</option>
+        <option value="Policy updated">Policy updated</option>
+        <option value="Under review">Under review</option>
+      </select>
+    </div>
+    <button class="btn primary" style="width:100%; margin-top:10px;" onclick="publishResponse()">Publish Response Live</button>
+  </div>
+</div>
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="admin.js"></script>
+</body>
+</html>

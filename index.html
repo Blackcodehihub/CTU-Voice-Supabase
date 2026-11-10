@@ -30,11 +30,9 @@
     <button data-target="track" onclick="showPage('track')">My Submission</button>
     <button data-target="heard" onclick="showPage('heard')">You Said. We Heard.</button>
     <button data-target="support" onclick="showPage('support')">Support</button>
-    <button data-target="login" onclick="showPage('login')" class="mobile-login-btn">Staff Login</button>
   </div>
   
   <div class="nav-actions">
-    <button class="btn secondary desktop-login-btn" onclick="showPage('login')">Staff Login</button>
     <button class="hamburger" onclick="toggleMenu()">☰</button>
   </div>
 </nav>
@@ -122,7 +120,6 @@
       <aside class="panel"><h3>Before you submit</h3><p class="small muted">You can share academic, emotional, social, institutional, identity-related concerns, suggestions, or appeals.</p><hr style="border:0;border-top:1px solid var(--line)"><h3>What happens next?</h3><p class="small muted">Your submission is ethically screened, organized by concern, and may contribute to recurring-pattern review.</p><p class="small muted"><b>We focus on patterns rather than personalities.</b></p></aside>
     </div>
   </div>
-  
   <div id="submitSuccessContainer" class="hidden"></div>
 </section>
 
@@ -144,193 +141,31 @@
   <div class="animate-on-scroll">
     <div class="eyebrow">Support</div><h2>You don't have to submit a story to ask for help.</h2><p class="muted">This system supplements formal university channels rather than replacing them.</p>
   </div>
-  
   <div class="cards" style="margin-top:25px;">
-    
+    <!-- (Support Cards Remain Exactly As You Had Them) -->
     <div class="card animate-on-scroll">
-      <div class="support-badge academic">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
-      </div>
-      <h3>Academic Support</h3>
-      <p>Academic advising, requirements, workload, and course concerns.</p>
+      <div class="support-badge academic"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg></div>
+      <h3>Academic Support</h3><p>Academic advising, requirements, workload, and course concerns.</p>
       <button class="btn secondary" style="margin-top:10px; width:100%;" onclick="window.open('https://www.facebook.com/ctuacadmissionoffice', '_blank')">View Support</button>
     </div>
-
     <div class="card animate-on-scroll">
-      <div class="support-badge emotional">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-      </div>
-      <h3>Emotional Support</h3>
-      <p>Guidance and well-being resources for students experiencing distress.</p>
+      <div class="support-badge emotional"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+      <h3>Emotional Support</h3><p>Guidance and well-being resources for students experiencing distress.</p>
       <button class="btn secondary" style="margin-top:10px; width:100%;" onclick="window.open('https://www.facebook.com/ctuacpeerfacilitator', '_blank')">Find Support</button>
     </div>
-
     <div class="card animate-on-scroll">
-      <div class="support-badge affairs">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
-      </div>
-      <h3>Student Affairs</h3>
-      <p>Institutional concerns, services, policies, and student welfare.</p>
+      <div class="support-badge affairs"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg></div>
+      <h3>Student Affairs</h3><p>Institutional concerns, services, policies, and student welfare.</p>
       <button class="btn secondary" style="margin-top:10px; width:100%;" onclick="window.open('https://www.facebook.com/profile.php?id=100080414087307', '_blank')">Contact Office</button>
     </div>
-
     <div class="card animate-on-scroll">
-      <div class="support-badge formal">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
-      </div>
-      <h3>Formal Reporting</h3>
-      <p>Use official procedures when an investigation, documentation, or due process is required.</p>
+      <div class="support-badge formal"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg></div>
+      <h3>Formal Reporting</h3><p>Use official procedures when an investigation, documentation, or due process is required.</p>
       <button class="btn secondary" style="margin-top:10px; width:100%;" onclick="window.open('https://www.facebook.com/profile.php?id=100080414087307', '_blank')">Message Administration</button>
     </div>
-
   </div>
-  
   <div class="notice animate-on-scroll" style="margin-top:22px"><b>Immediate safety:</b> This prototype is not an emergency response service. For urgent or immediate safety concerns, use the appropriate official emergency/support channel.</div>
 </div></section>
-
-<section id="login" class="page auth-page"><div class="container section animate-on-scroll">
-  <div class="panel">
-    <div class="center" style="margin-bottom: 12px;">
-      <img src="logo.jpg" alt="CTU Logo" class="ctu-logo" style="width: 65px; height: 65px;">
-    </div>
-    <h2 class="center">Staff Authentication</h2>
-    <p class="muted center">Log in to the administrative dashboard to review and manage student feedback.</p>
-
-    <div class="field">
-      <label>Staff Email</label>
-      <input type="email" id="loginEmail" placeholder="admin@ctu.edu.ph">
-    </div>
-    
-    <div class="field">
-      <label>Password</label>
-      <div class="password-wrapper">
-        <input type="password" id="loginPassword" placeholder="Enter your password">
-        <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
-          <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 8C19.78 10.74 16.14 12.5 12 12.5C7.86 12.5 4.22 10.74 2 8"></path>
-            <path d="M12 12.5V16.5"></path>
-            <path d="M7.5 11.5L5.5 14.5"></path>
-            <path d="M16.5 11.5L18.5 14.5"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-    
-    <div class="checklist" style="margin: 15px 0; background: #fff0c9; border-color: #d69f38;">
-      <label style="color: #8a6100;">
-        <input type="checkbox" id="adminConfidentiality"> 
-        <span><strong>Strict Confidentiality Agreement:</strong> I acknowledge that student submissions are sensitive. I agree not to share, discuss, or "chika" these concerns outside of official university procedures.</span>
-      </label>
-    </div>
-    
-    <button class="btn primary" style="width:100%;margin-top:12px;" onclick="handleLogin()">Log In to Dashboard</button>
-    <p class="center small muted" style="margin-top:18px;">
-      <span style="color:var(--muted);">Secure area restricted to authorized university personnel only.</span>
-    </p>
-  </div>
-</div></section>
-
-<section id="dashboard" class="page">
-  <div style="background:var(--navy2); padding: 20px 5%; color:white; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:20;">
-    <div><strong>CTU VOICE ADMIN</strong> <span class="status received" style="margin-left:10px; background:#fff; color:var(--navy2);">Secure</span></div>
-    <div style="display:flex; gap:10px;">
-      <button class="btn secondary" style="padding:6px 12px!important; font-size:12px;" onclick="handleLogout()">Logout</button>
-    </div>
-  </div>
-  
-  <div class="container section">
-    <div class="animate-on-scroll">
-      <h2>Dashboard Overview</h2>
-      <div class="cards" id="adminMetrics" style="margin-bottom: 25px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));"></div>
-    </div>
-    
-    <div class="panel animate-on-scroll" style="padding:20px; overflow-x:auto; -webkit-overflow-scrolling: touch;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px; flex-wrap:wrap; gap:10px;">
-        <h3 style="margin:0;">Incoming Submissions</h3>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <select id="filterCategory" onchange="loadDashboard()" class="admin-filter">
-            <option value="All">All Categories</option>
-            <option value="Academic Concern">Academic Concern</option>
-            <option value="Institutional Concern">Institutional Concern</option>
-            <option value="Personal Experience">Personal Experience</option>
-            <option value="Emotional Well-being">Emotional Well-being</option>
-            <option value="Identity & Belonging">Identity & Belonging</option>
-            <option value="Suggestion / Improvement">Suggestion / Improvement</option>
-            <option value="Appeal / Request">Appeal / Request</option>
-            <option value="Other">Other</option>
-          </select>
-          <select id="filterStatus" onchange="loadDashboard()" class="admin-filter">
-            <option value="All">All Statuses</option>
-            <option value="Received">Received</option>
-            <option value="Under Review">Under Review</option>
-            <option value="Responded">Responded</option>
-            <option value="Archived">Archived (Spam)</option>
-          </select>
-        </div>
-      </div>
-
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Reference</th>
-            <th>Category</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="adminTableBody">
-          </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-
-<div id="viewModal" class="modal-overlay" onclick="if(event.target===this) closeModal('viewModal')">
-  <div class="modal-content">
-    <button class="close-modal" onclick="closeModal('viewModal')">✕</button>
-    <div class="eyebrow" id="viewCategory">Category</div>
-    <h3 style="margin-top:5px; margin-bottom:15px;">Submission Details</h3>
-    <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:15px;">
-      <span class="muted small">Ref: <strong style="color:var(--navy);" id="viewRef"></strong></span>
-      <span class="muted small">Date: <span id="viewDate"></span></span>
-    </div>
-    <div style="background:var(--cream); padding:15px; border-radius:12px; margin-bottom:15px;">
-      <strong style="font-size:12px; color:var(--muted); display:block; margin-bottom:5px;">Student Intent:</strong>
-      <span id="viewIntent" style="font-size:13px; font-weight:600;"></span>
-    </div>
-    <p id="viewStory" style="white-space:pre-wrap; font-size:14px; line-height:1.6; word-break: break-word; overflow-wrap: anywhere;"></p>
-  </div>
-</div>
-
-<div id="publishModal" class="modal-overlay" onclick="if(event.target===this) closeModal('publishModal')">
-  <div class="modal-content">
-    <button class="close-modal" onclick="closeModal('publishModal')">✕</button>
-    <div class="eyebrow">Public Feedback Loop</div>
-    <h3 style="margin-top:5px; margin-bottom:5px;">Publish Institutional Response</h3>
-    <p class="muted small" style="margin-bottom:20px;">This will publish an update directly to the "You Said. We Heard." public page.</p>
-    
-    <div class="field">
-      <label>Response Title</label>
-      <input type="text" id="pubTitle" placeholder="e.g., Campus Wi-Fi Expansion">
-    </div>
-    <div class="field">
-      <label>Concern & Action Taken Summary</label>
-      <textarea id="pubConcern" style="min-height:100px;" placeholder="Summarize the pattern of concern and what the university is doing to resolve it."></textarea>
-    </div>
-    <div class="field">
-      <label>Status Label</label>
-      <select id="pubStatusLabel">
-        <option value="Action underway">Action underway</option>
-        <option value="Support shared">Support shared</option>
-        <option value="Policy updated">Policy updated</option>
-        <option value="Under review">Under review</option>
-      </select>
-    </div>
-    <button class="btn primary" style="width:100%; margin-top:10px;" onclick="publishResponse()">Publish Response Live</button>
-  </div>
-</div>
-
 </main>
 
 <footer class="footer"><div class="container"><b>CTU VOICE</b><br><small>Anonymous stories. Meaningful dialogue. | Privacy | Terms | Accessibility | Prototype</small></div></footer>
