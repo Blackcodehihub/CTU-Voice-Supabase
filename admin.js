@@ -23,43 +23,88 @@ function toast(msg) {
 }
 
 function escapeHtml(s) {
-  return s.replace(/[&<>"']/g, m => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"}[m]));
+  return String(s ?? "").replace(/[&<>"']/g, m => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"}[m]));
 }
 
-async function handleLogin() {
-  const email = document.getElementById("loginEmail").value.trim();
-  const pass = document.getElementById("loginPassword").value.trim();
-  const isConfidentialityChecked = document.getElementById("adminConfidentiality").checked;
-  
-  if (!isConfidentialityChecked) {
-    toast("You must agree to the Strict Confidentiality Agreement before logging in.");
-    return;
-  }
-  
-  if (email === "admin@ctu.edu.ph" && pass === "admin123") {
-    document.getElementById("adminNav").style.display = "none";
-    showPage('dashboard');
-    await fetchLiveData(); 
-    loadDashboard();
-    document.getElementById("adminConfidentiality").checked = false;
-    toast("Welcome to the Admin Dashboard.");
-  } else {
-    toast("Incorrect email or password.");
-  }
+// --- AUTH (Supabase Auth: the session is stored by supabase-js and survives a page refresh) ---
+let dashboardOpen = false;
+
+async function enterDashboard() {
+  if (dashboardOpen) return;
+  dashboardOpen = true;
+  document.getElementById("adminNav").style.display = "none";
+  showPage("dashboard");
+  await fetchLiveData();
+  loadDashboard();
 }
 
-function handleLogout() {
+function showLogin() {
+  dashboardOpen = false;
+  submissions = [];
   document.getElementById("loginEmail").value = "";
   document.getElementById("loginPassword").value = "";
   document.getElementById("adminNav").style.display = "flex";
-  
+
   const passInput = document.getElementById("loginPassword");
   const icon = document.getElementById("eyeIcon");
   passInput.type = "password";
   icon.innerHTML = '<path d="M22 8C19.78 10.74 16.14 12.5 12 12.5C7.86 12.5 4.22 10.74 2 8"></path><path d="M12 12.5V16.5"></path><path d="M7.5 11.5L5.5 14.5"></path><path d="M16.5 11.5L18.5 14.5"></path>';
-  
-  showPage('login');
-  toast("Successfully logged out.");
+
+  showPage("login");
+}
+
+async function handleLogin() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const pass = document.getElementById("loginPassword").value;
+
+  if (!document.getElementById("adminConfidentiality").checked) {
+    toast("You must agree to the Strict Confidentiality Agreement before logging in.");
+    return;
+  }
+  if (!email || !pass) {
+    toast("Please enter your email and password.");
+    return;
+  }
+
+  const { error } = await supabaseClient.auth.signInWithPassword({ email, password: pass });
+  if (error) {
+    toast("Incorrect email or password.");
+    return;
+  }
+
+  document.getElementById("adminConfidentiality").checked = false;
+  await enterDashboard();
+  toast("Welcome to the Admin Dashboard.");
+}
+
+async function handleLogout() {
+  await supabaseClient.auth.signOut(); // the SIGNED_OUT listener below switches back to the login page
+}
+
+async function initAdmin() {
+  supabaseClient.auth.onAuthStateChange((event) => {
+    if (event === "SIGNED_OUT") {
+      showLogin();
+      toast("Successfully logged out.");
+    }
+  });
+
+  const { data: { session } } = await supabaseClient.auth.getSession();
+  if (session) await enterDashboard();
+  else showLogin();
+  document.getElementById("authLoading").style.display = "none";
+
+  // Table actions (data-* attributes instead of inline onclick keeps user-supplied text out of JS)
+  const tbody = document.getElementById("adminTableBody");
+  tbody.addEventListener("change", e => {
+    if (e.target.matches(".status-select")) updateStatus(e.target.dataset.ref, e.target.value);
+  });
+  tbody.addEventListener("click", e => {
+    const btn = e.target.closest("button[data-action]");
+    if (!btn) return;
+    if (btn.dataset.action === "view") viewSubmission(btn.dataset.ref);
+    if (btn.dataset.action === "publish") openPublishModal(btn.dataset.ref);
+  });
 }
 
 function togglePasswordVisibility() {
@@ -108,23 +153,22 @@ function loadDashboard() {
   
   tbody.innerHTML = filtered.map(sub => {
     const dateStr = new Date(sub.created_at).toLocaleDateString();
+    const ref = escapeHtml(sub.ref_code);
+    const opt = (v, label) => `<option value="${v}" ${sub.status === v ? "selected" : ""}>${label}</option>`;
     return `
       <tr>
         <td style="font-size:12px; color:var(--muted);">${dateStr}</td>
-        <td><strong>${sub.ref_code}</strong></td>
-        <td><span style="font-size:12px;">${sub.category}</span></td>
+        <td><strong>${ref}</strong></td>
+        <td><span style="font-size:12px;">${escapeHtml(sub.category)}</span></td>
         <td>
-          <select class="status-select" onchange="updateStatus('${sub.ref_code}', this.value)">
-            <option value="Received" ${sub.status === 'Received' ? 'selected' : ''}>Received</option>
-            <option value="Under Review" ${sub.status === 'Under Review' ? 'selected' : ''}>Under Review</option>
-            <option value="Responded" ${sub.status === 'Responded' ? 'selected' : ''}>Responded</option>
-            <option value="Archived" ${sub.status === 'Archived' ? 'selected' : ''}>Archived (Spam)</option>
+          <select class="status-select" data-ref="${ref}">
+            ${opt("Received", "Received")}${opt("Under Review", "Under Review")}${opt("Responded", "Responded")}${opt("Archived", "Archived (Spam)")}
           </select>
         </td>
         <td>
           <div style="display:flex; gap:6px;">
-            <button class="btn secondary" style="padding:6px 10px!important; font-size:11px;" onclick="viewSubmission('${sub.ref_code}')">View</button>
-            <button class="btn primary" style="padding:6px 10px!important; font-size:11px;" onclick="openPublishModal('${sub.ref_code}')">Publish</button>
+            <button class="btn secondary" style="padding:6px 10px!important; font-size:11px;" data-action="view" data-ref="${ref}">View</button>
+            <button class="btn primary" style="padding:6px 10px!important; font-size:11px;" data-action="publish" data-ref="${ref}">Publish</button>
           </div>
         </td>
       </tr>
@@ -196,3 +240,5 @@ async function publishResponse() {
 function closeModal(modalId) {
   document.getElementById(modalId).classList.remove("active");
 }
+
+initAdmin();

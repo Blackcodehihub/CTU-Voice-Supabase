@@ -76,12 +76,14 @@ function showPage(id) {
   }
 }
 
-function toast(msg) {
+function toast(msg, ms = 3000) {
   let t = document.getElementById("toast");
   t.textContent = msg;
   t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 3000);
+  setTimeout(() => t.classList.remove("show"), ms);
 }
+
+const PROFANITY_MSG = "Your message contains inappropriate language. Please rephrase it. If you need to quote a word, mask it with asterisks (e.g. f***).";
 
 function code() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -152,6 +154,13 @@ async function submitStory() {
     return; 
   }
   
+  // --- PROFANITY FILTER ---
+  if (containsProfanity(story)) {
+    toast(PROFANITY_MSG, 6000);
+    document.getElementById("story").focus();
+    return;
+  }
+
   // --- SPAM DEFENSE 3.0 ---
   const textWithoutSpaces = story.replace(/\s/g, '');
   const uniqueChars = new Set(textWithoutSpaces).size;
@@ -180,6 +189,11 @@ async function submitStory() {
   ]);
 
   if (error) {
+    // Server-side filter (database trigger) caught something the browser check missed
+    if (String(error.message).includes("PROFANITY_REJECTED")) {
+      toast(PROFANITY_MSG, 6000);
+      return;
+    }
     toast("Error saving submission. Please try again.");
     console.error(error);
     return;
@@ -236,7 +250,7 @@ async function trackSubmission() {
   if (item.status === "Responded") statusClass = "responded";
   if (item.status === "Archived") statusClass = "archived";
   
-  result.innerHTML = `<div class="panel animate-on-scroll is-visible"><div style="display:flex;justify-content:space-between"><h3>${item.category}</h3><span class="status ${statusClass}">${item.status}</span></div><p class="small muted">Reference: ${item.ref_code}</p><p>${escapeHtml(item.story)}</p><hr style="border:0;border-top:1px solid var(--line)"><b>What happens next?</b><p class="small muted">Your concern may be reviewed individually and/or considered as part of recurring anonymous patterns.</p></div>`;
+  result.innerHTML = `<div class="panel animate-on-scroll is-visible"><div style="display:flex;justify-content:space-between"><h3>${escapeHtml(item.category)}</h3><span class="status ${statusClass}">${escapeHtml(item.status)}</span></div><p class="small muted">Reference: ${escapeHtml(item.ref_code)}</p><p>${escapeHtml(item.story)}</p><hr style="border:0;border-top:1px solid var(--line)"><b>What happens next?</b><p class="small muted">Your concern may be reviewed individually and/or considered as part of recurring anonymous patterns.</p></div>`;
 }
 
 function escapeHtml(s) {
