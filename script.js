@@ -4,7 +4,7 @@ const supabaseKey = 'sb_publishable_RZdvcVIeoPE3eXqZO3iHRA_zRi0SBgX';
 const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 let selectedCategory = "";
-let submissions = [];
+let categoryCounts = [];   // [{category, total}] from the category_counts() database function
 let publishedResponses = [];
 
 // --- 2. FETCH LIVE DATA ON LOAD ---
@@ -13,8 +13,9 @@ async function fetchLiveData() {
   if (respData) publishedResponses = respData;
   updateHeardSection();
 
-  const { data: subData } = await supabaseClient.from('submissions').select('*').order('created_at', { ascending: false });
-  if (subData) submissions = subData;
+  // Trends come from a database function that returns only counts, never the stories
+  const { data: countData } = await supabaseClient.rpc('category_counts');
+  if (countData) categoryCounts = countData.map(r => ({ category: r.category, total: Number(r.total) }));
   updateTrends();
 }
 
@@ -68,6 +69,7 @@ function showPage(id) {
       successDiv.classList.add("hidden");
       
       document.getElementById("story").value = "";
+      document.getElementById("accessCode").value = "";
       document.getElementById("intent").selectedIndex = 0;
       document.querySelectorAll(".privacyCheck").forEach(c => c.checked = false);
       document.querySelectorAll(".option").forEach(x => x.classList.remove("selected"));
@@ -85,25 +87,18 @@ function toast(msg, ms = 3000) {
 
 const PROFANITY_MSG = "Your message contains inappropriate language. Please rephrase it. If you need to quote a word, mask it with asterisks (e.g. f***).";
 
-function code() {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let s = "";
-  for(let i = 0; i < 4; i++) s += chars[Math.floor(Math.random() * chars.length)];
-  return "CV-" + s + "-" + Math.floor(10 + Math.random() * 90);
-}
-
 function updateTrends() {
   const container = document.getElementById("trendContainer");
   if (!container) return;
   const defaultCategories = ["Academic Concern", "Institutional Concern", "Personal Experience", "Emotional Well-being", "Identity & Belonging"];
-  const total = submissions.length;
+  const total = categoryCounts.reduce((sum, r) => sum + r.total, 0);
   let trends = [];
 
   if (total === 0) {
     trends = defaultCategories.map(cat => ({ category: cat, percent: 0 }));
   } else {
     const counts = {};
-    submissions.forEach(sub => { counts[sub.category] = (counts[sub.category] || 0) + 1; });
+    categoryCounts.forEach(r => { counts[r.category] = (counts[r.category] || 0) + r.total; });
     trends = Object.keys(counts).map(cat => ({ category: cat, percent: Math.round((counts[cat] / total) * 100) })).sort((a, b) => b.percent - a.percent);
     if (trends.length < 5) {
       const existingCats = trends.map(t => t.category);
@@ -145,9 +140,12 @@ function updateHeardSection() {
 // --- 3. SAVE SUBMISSION TO CLOUD DB WITH SPAM FILTERS ---
 async function submitStory() {
   const story = document.getElementById("story").value.trim();
+  const accessCode = document.getElementById("accessCode").value.trim();
   const checks = [...document.querySelectorAll(".privacyCheck")];
   
   if(!selectedCategory) { toast("Please choose a concern category."); return; }
+
+  if(!accessCode) { toast("Please enter your access code. Ask your student council or instructor if you don't have one."); document.getElementById("accessCode").focus(); return; }
   
   if(story.length < 30) { 
     toast("Please write at least 30 characters to explain the situation clearly."); 
@@ -181,24 +179,33 @@ async function submitStory() {
   
   if(!checks.every(x => x.checked)) { toast("Please complete the privacy confirmations."); return; }
   
-  const ref = code();
   const intent = document.getElementById("intent").value;
-  
-  const { error } = await supabaseClient.from('submissions').insert([
-    { ref_code: ref, category: selectedCategory, intent: intent, story: story, status: "Received" }
-  ]);
 
-  if (error) {
-    // Server-side filter (database trigger) caught something the browser check missed
-    if (String(error.message).includes("PROFANITY_REJECTED")) {
-      toast(PROFANITY_MSG, 6000);
-      return;
-    }
+  // The database function checks the bad-word filter, uses up the single-use code, then saves
+  const { data: result, error } = await supabaseClient.rpc('submit_story', {
+    p_code: accessCode, p_category: selectedCategory, p_intent: intent, p_story: story
+  });
+
+  if (error || !result) {
     toast("Error saving submission. Please try again.");
     console.error(error);
     return;
   }
-  
+
+  if (!result.ok) {
+    const messages = {
+      BAD_CODE: "That access code is not valid or has already been used. Each code works only once. Ask your student council or instructor for a new one.",
+      RATE_LIMITED: "Too many attempts right now. Please wait a few minutes and try again.",
+      INVALID_STORY: "Your story must be between 30 and 5000 characters.",
+      INVALID_CATEGORY: "Please choose a concern category."
+    };
+    if (result.error === "PROFANITY_REJECTED") toast(PROFANITY_MSG, 6000);
+    else toast(messages[result.error] || "Error saving submission. Please try again.", 5000);
+    return;
+  }
+
+  const ref = result.ref;
+
   fetchLiveData(); 
   
   document.getElementById("submitFormContainer").classList.add("hidden");
@@ -236,7 +243,8 @@ async function trackSubmission() {
   const ref = document.getElementById("trackCode").value.trim().toUpperCase();
   const result = document.getElementById("trackResult");
   
-  const { data: item, error } = await supabaseClient.from('submissions').select('*').eq('ref_code', ref).single();
+  const { data: rows, error } = await supabaseClient.rpc('track_submission', { p_ref: ref });
+  const item = rows && rows[0];
   
   result.classList.remove("hidden");
   

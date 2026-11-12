@@ -15,11 +15,11 @@ function showPage(id) {
   window.scrollTo({top: 0, behavior: "smooth"});
 }
 
-function toast(msg) {
+function toast(msg, ms = 3000) {
   let t = document.getElementById("toast");
   t.textContent = msg;
   t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 3000);
+  setTimeout(() => t.classList.remove("show"), ms);
 }
 
 function escapeHtml(s) {
@@ -28,6 +28,11 @@ function escapeHtml(s) {
 
 // --- AUTH (Supabase Auth: the session is stored by supabase-js and survives a page refresh) ---
 let dashboardOpen = false;
+
+async function isAdmin() {
+  const { data, error } = await supabaseClient.rpc("is_admin");
+  return !error && data === true;
+}
 
 async function enterDashboard() {
   if (dashboardOpen) return;
@@ -71,6 +76,11 @@ async function handleLogin() {
     toast("Incorrect email or password.");
     return;
   }
+  if (!(await isAdmin())) {
+    await supabaseClient.auth.signOut();
+    toast("This account doesn't have admin access.", 4000);
+    return;
+  }
 
   document.getElementById("adminConfidentiality").checked = false;
   await enterDashboard();
@@ -84,13 +94,15 @@ async function handleLogout() {
 async function initAdmin() {
   supabaseClient.auth.onAuthStateChange((event) => {
     if (event === "SIGNED_OUT") {
+      const wasOpen = dashboardOpen;
       showLogin();
-      toast("Successfully logged out.");
+      if (wasOpen) toast("Successfully logged out.");
     }
   });
 
   const { data: { session } } = await supabaseClient.auth.getSession();
-  if (session) await enterDashboard();
+  // A student session in the same browser is not an admin session
+  if (session && await isAdmin()) await enterDashboard();
   else showLogin();
   document.getElementById("authLoading").style.display = "none";
 
